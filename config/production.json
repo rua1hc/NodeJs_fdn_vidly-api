@@ -1,0 +1,6 @@
+{
+    "name": "iExpress - Production",
+    "mail": {
+        "host": "prod-mail-server"
+    }
+}

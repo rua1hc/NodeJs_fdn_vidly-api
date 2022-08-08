@@ -1,4 +1,3 @@
-const Joi = require("joi");
 const express = require("express");
 const mongoose = require("mongoose");
 const { Customer, validate } = require("../models/customer");

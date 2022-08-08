@@ -1,6 +1,7 @@
-const Joi = require("joi");
 const express = require("express");
 const mongoose = require("mongoose");
+
+const { Genre, validate } = require("../models/genre");
 
 const router = express.Router();
 
@@ -12,18 +13,6 @@ const router = express.Router();
 //         maxlength: 50,
 //     },
 // });
-
-const Genre = mongoose.model(
-    "Genre",
-    new mongoose.Schema({
-        name: {
-            type: String,
-            required: true,
-            minlength: 3,
-            maxlength: 50,
-        },
-    })
-);
 
 // const genres = [
 //     { id: 1, name: "Action" },
@@ -51,7 +40,7 @@ router.get("/:id", async (req, res) => {
 
 // ********* POST
 router.post("/", async (req, res) => {
-    const { error } = validateGenre(req.body.name);
+    const { error } = validate(req.body.name);
     if (error) return res.status(400).send(error.details[0].message);
 
     // const genre = {
@@ -74,7 +63,7 @@ router.post("/", async (req, res) => {
 
 // ********* PUT
 router.put("/:id", async (req, res) => {
-    const { error } = validateGenre(req.body.name);
+    const { error } = validate(req.body.name);
     if (error) return res.status(400).send(error.details[0].message);
 
     // const genre = genres.find((g) => g.id === parseInt(req.params.id));
@@ -111,13 +100,5 @@ router.delete("/:id", async (req, res) => {
     // const index = genres.indexOf(genre);
     // genres.splice(index, 1);
 });
-
-// ********* HELPER
-function validateGenre(genre) {
-    const scheme = Joi.object({
-        name: Joi.string().min(3).required(),
-    });
-    return scheme.validate({ name: genre });
-}
 
 module.exports = router;

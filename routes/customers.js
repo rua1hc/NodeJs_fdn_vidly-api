@@ -30,14 +30,15 @@ router.post("/", async (req, res) => {
         phone: req.body.phone,
         isGold: req.body.isGold,
     });
-    try {
-        customer = await customer.save();
-        res.send(customer);
-    } catch (ex) {
-        for (const err in ex.errors) {
-            console.log(ex.errors[err].message);
-        }
-    }
+
+    // try {
+    customer = await customer.save();
+    res.send(customer);
+    // } catch (ex) {
+    //     for (const err in ex.errors) {
+    //         console.log(ex.errors[err].message);
+    //     }
+    // }
 });
 
 // ********* PUT

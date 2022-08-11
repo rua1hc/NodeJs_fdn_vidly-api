@@ -1,0 +1,18 @@
+### GET Customers
+http://localhost:3000/api/customers
+
+### GET Movies
+http://localhost:3000/api/movies
+
+### GET Rentals
+http://localhost:3000/api/rentals
+
+### POST Rentals
+POST http://localhost:3000/api/rentals
+content-type: application/json
+
+{
+    "customerId": "62efecd4debea8024036af82",
+    "movieId": "62c144939cb3d01be0feb910"
+}
+

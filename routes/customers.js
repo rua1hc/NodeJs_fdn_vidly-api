@@ -32,7 +32,7 @@ router.post("/", async (req, res) => {
     });
 
     // try {
-    customer = await customer.save();
+    await customer.save();
     res.send(customer);
     // } catch (ex) {
     //     for (const err in ex.errors) {

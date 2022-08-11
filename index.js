@@ -1,4 +1,6 @@
 const debug = require("debug")("app:startup");
+const Joi = require("joi");
+Joi.objectId = require("joi-objectid")(Joi);
 
 const mongoose = require("mongoose");
 const config = require("config");
@@ -9,11 +11,12 @@ const home = require("./routes/home");
 const movies = require("./routes/movies");
 const genres = require("./routes/genres");
 const customers = require("./routes/customers");
+const rentals = require("./routes/rentals");
 
 const vidlyUrl = "mongodb://localhost/vidly";
 
 mongoose
-    .connect(vidlyUrl)
+    .connect(vidlyUrl, { useNewUrlParser: true })
     .then(() => console.log("Connected to mongoDB"))
     .catch((ex) => console.log(ex));
 
@@ -26,6 +29,7 @@ app.use(express.json());
 app.use("/api/movies", movies);
 app.use("/api/genres", genres);
 app.use("/api/customers", customers);
+app.use("/api/rentals", rentals);
 app.use("/", home);
 
 if (app.get("env") === "development") {

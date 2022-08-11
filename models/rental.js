@@ -4,41 +4,69 @@ const mongoose = require("mongoose");
 const Rental = mongoose.model(
     "Rental",
     new mongoose.Schema({
-        title: {
-            type: String,
+        customer: {
+            type: new mongoose.Schema({
+                name: {
+                    type: String,
+                    required: true,
+                    trim: true,
+                },
+                isGold: {
+                    type: String,
+                    required: true,
+                    default: false,
+                },
+                phone: {
+                    type: String,
+                    required: true,
+                    minlength: 3,
+                    maxlength: 20,
+                },
+            }),
             required: true,
-            trim: true,
-            minlength: 1,
-            maxlength: 255,
         },
-        numberInStock: {
-            type: Number,
+        movie: {
+            type: new mongoose.Schema({
+                title: {
+                    type: String,
+                    required: true,
+                    trim: true,
+                    minlength: 1,
+                    maxlength: 255,
+                },
+                dailyRentalRate: {
+                    type: Number,
+                    required: true,
+                    min: 0,
+                    max: 255,
+                },
+            }),
             required: true,
-            min: 0,
-            max: 255,
         },
-        dailyRentalRate: {
-            type: Number,
+        dateOut: {
+            type: Date,
             required: true,
+            default: Date.now,
+        },
+        dateExpired: {
+            type: Date,
+        },
+        rentalFee: {
+            type: Number,
             min: 0,
-            max: 255,
         },
     })
 );
 
 // ********* HELPER
-function validateRental(movie) {
+function validateRental(rental) {
     const scheme = Joi.object({
-        title: Joi.string().min(1).max(255).required(),
-        genreId: Joi.string().required(),
-        numberInStock: Joi.number().integer().min(0).max(255).required(),
-        dailyRentalRate: Joi.number().min(0).max(255).required(),
+        customerId: Joi.objectId().required(),
+        movieId: Joi.objectId().required(),
     });
     return scheme.validate({
-        title: movie.title,
-        genreId: movie.genreId,
-        numberInStock: movie.numberInStock,
-        dailyRentalRate: movie.dailyRentalRate,
+        customerId: rental.customerId,
+        movieId: rental.movieId,
     });
 }
 

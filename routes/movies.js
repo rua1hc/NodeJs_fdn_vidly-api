@@ -27,7 +27,9 @@ router.post("/", async (req, res) => {
     if (error) return res.status(400).send(error.details[0].message);
 
     try {
+        // console.log(req.body.genreId);
         const genre = await Genre.findById(req.body.genreId);
+        // console.log(genre);
         if (!genre)
             return res.status(404).send("The given genreId is not found");
 
@@ -42,7 +44,7 @@ router.post("/", async (req, res) => {
             dailyRentalRate: req.body.dailyRentalRate,
         });
 
-        movie = await movie.save();
+        await movie.save();
         res.send(movie);
     } catch (ex) {
         for (const err in ex.errors) {

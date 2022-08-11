@@ -52,7 +52,7 @@ router.post("/", async (req, res) => {
 
     let genre = new Genre({ name: req.body.name });
     try {
-        genre = await genre.save();
+        await genre.save();
         res.send(genre);
     } catch (ex) {
         for (const err in ex.errors) {

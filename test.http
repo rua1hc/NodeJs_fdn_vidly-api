@@ -1,13 +1,50 @@
-### GET Customers
-http://localhost:3000/api/customers
-
-### GET Movies
+###
 http://localhost:3000/api/movies
 
-### GET Rentals
-http://localhost:3000/api/rentals
 
-### POST Rentals
+###
+http://localhost:3000/api/customers
+
+
+###
+http://localhost:3000/api/genres
+###
+POST http://localhost:3000/api/genres
+x-auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MmY2MTU3ZWRiYzA1YjI4MWNiNWIwZGIiLCJpYXQiOjE2NjAyOTQ1MjZ9.Rnt85fNxuDGb6pIju03-YqcvmVFyYAvtjD7fJnd9ubc
+content-type: application/json
+
+{
+    "name": "add-auth"
+}
+
+
+
+### ### ###
+http://localhost:3000/api/users
+###
+POST http://localhost:3000/api/users
+content-type: application/json
+
+{
+    "name": "auth-token1",
+    "email": "auth.token1@node.com",
+    "password": "12341234"
+}
+
+
+### ### ###
+POST http://localhost:3000/api/auth
+content-type: application/json
+
+{
+    "email": "hashpw@node.com",
+    "password": "12341234"
+}
+
+
+### ### ###
+http://localhost:3000/api/rentals
+###
 POST http://localhost:3000/api/rentals
 content-type: application/json
 

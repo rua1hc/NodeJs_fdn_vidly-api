@@ -1,8 +1,9 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const { Rental, validate } = require("../models/rental");
 const { Movie } = require("../models/movie");
 const { Customer } = require("../models/customer");
+const { Rental, validate } = require("../models/rental");
+const auth = require("../middleware/auth");
 
 const router = express.Router();
 
@@ -12,18 +13,18 @@ router.get("/", async (req, res) => {
     res.send(rentals);
 });
 
-// router.get("/:id", async (req, res) => {
-//     try {
-//         const movie = await Rental.findById(req.params.id);
-//         res.send(movie);
-//     } catch (ex) {
-//         console.log(ex.message);
-//         return res.status(404).send("The given movie ID not found");
-//     }
-// });
+router.get("/:id", async (req, res) => {
+    try {
+        const rental = await Rental.findById(req.params.id);
+        res.send(rental);
+    } catch (ex) {
+        console.log(ex.message);
+        return res.status(404).send("The given rental ID not found");
+    }
+});
 
 // ********* POST
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
     const { error } = validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 

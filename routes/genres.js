@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 
+const auth = require("../middleware/auth");
 const { Genre, validate } = require("../models/genre");
 
 const router = express.Router();
@@ -39,8 +40,8 @@ router.get("/:id", async (req, res) => {
 });
 
 // ********* POST
-router.post("/", async (req, res) => {
-    const { error } = validate(req.body.name);
+router.post("/", auth, async (req, res) => {
+    const { error } = validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
     // const genre = {
@@ -63,7 +64,7 @@ router.post("/", async (req, res) => {
 
 // ********* PUT
 router.put("/:id", async (req, res) => {
-    const { error } = validate(req.body.name);
+    const { error } = validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
     // const genre = genres.find((g) => g.id === parseInt(req.params.id));

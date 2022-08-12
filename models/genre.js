@@ -17,7 +17,7 @@ function validateGenre(genre) {
     const scheme = Joi.object({
         name: Joi.string().min(3).max(50).required(),
     });
-    return scheme.validate({ name: genre });
+    return scheme.validate({ name: genre.name });
 }
 
 module.exports.genreSchema = genreSchema;

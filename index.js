@@ -2,18 +2,25 @@ const debug = require("debug")("app:startup");
 const Joi = require("joi");
 Joi.objectId = require("joi-objectid")(Joi);
 
-const mongoose = require("mongoose");
 const config = require("config");
-const morgan = require("morgan");
+const mongoose = require("mongoose");
 const express = require("express");
+const morgan = require("morgan");
 
-const home = require("./routes/home");
 const movies = require("./routes/movies");
 const genres = require("./routes/genres");
 const customers = require("./routes/customers");
 const rentals = require("./routes/rentals");
+const users = require("./routes/users");
+const auth = require("./routes/auth");
+const home = require("./routes/home");
 
-const vidlyUrl = "mongodb://localhost/vidly";
+const vidlyUrl = "mongodb://localhost:27017/vidly";
+
+if (!config.get("jwtPrivateKey")) {
+    console.error("FATAL ERROR: jwtPirvateKey is not defined");
+    process.exit(1);
+}
 
 mongoose
     .connect(vidlyUrl, { useNewUrlParser: true })
@@ -30,6 +37,8 @@ app.use("/api/movies", movies);
 app.use("/api/genres", genres);
 app.use("/api/customers", customers);
 app.use("/api/rentals", rentals);
+app.use("/api/users", users);
+app.use("/api/auth", auth);
 app.use("/", home);
 
 if (app.get("env") === "development") {

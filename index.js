@@ -1,6 +1,8 @@
+require("express-async-errors");
 const debug = require("debug")("app:startup");
 const Joi = require("joi");
 Joi.objectId = require("joi-objectid")(Joi);
+const error = require("./middleware/error");
 
 const config = require("config");
 const mongoose = require("mongoose");
@@ -40,6 +42,8 @@ app.use("/api/rentals", rentals);
 app.use("/api/users", users);
 app.use("/api/auth", auth);
 app.use("/", home);
+
+app.use(error);
 
 if (app.get("env") === "development") {
     app.use(morgan("tiny"));

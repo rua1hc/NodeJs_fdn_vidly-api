@@ -16,14 +16,17 @@ router.get("/", async (req, res) => {
     res.send(users);
 });
 
+router.get("/me", auth, async (req, res) => {
+    const user = await User.findById(req.user._id).select("-password");
+    // if (!user) return res.status(404).send("The given user ID not found");
+    res.send(user);
+});
+
 router.get("/:id", async (req, res) => {
-    try {
-        const user = await User.findById(req.params.id);
-        res.send(user);
-    } catch (ex) {
-        console.log(ex.message);
-        return res.status(404).send("The given user ID not found");
-    }
+    const user = await User.findById(req.params.id);
+    if (!user) return res.status(404).send("The given user ID not found");
+
+    res.send(user);
 });
 
 // ********* POST
@@ -38,49 +41,19 @@ router.post("/", auth, async (req, res) => {
 
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(user.password, salt);
+    await user.save();
 
     // const token = jwt.sign({ _id: user._id }, config.get("jwtPrivateKey"));
     const token = user.generateAuthToken();
-
-    try {
-        await user.save();
-        res.header("x-auth-token", token).send(
-            _.pick(user, ["_id", "name", "email"])
-        );
-    } catch (ex) {
-        for (const err in ex.errors) {
-            console.log(ex.errors[err].message);
-        }
-    }
+    res.header("x-auth-token", token).send(
+        _.pick(user, ["_id", "name", "email"])
+    );
 });
 
 // ********* PUT
-// router.put("/:id", async (req, res) => {
-//     const { error } = validate(req.body);
-//     if (error) return res.status(400).send(error.details[0].message);
-
-//     try {
-//         const user = await User.findByIdAndUpdate(
-//             req.params.id,
-//             { name: req.body.name, password: req.body.password },
-//             { new: true }
-//         );
-//         res.send(user);
-//     } catch (ex) {
-//         console.log(ex.message);
-//         return res.status(404).send("The given user ID not found");
-//     }
-// });
+// router.put("/:id", async (req, res) => {});
 
 // ********* DELETE
-// router.delete("/:id", async (req, res) => {
-//     try {
-//         const user = await User.findByIdAndRemove(req.params.id);
-//         res.send(user);
-//     } catch (ex) {
-//         console.log(ex.message);
-//         return res.status(404).send("The given user ID not found");
-//     }
-// });
+// router.delete("/:id", async (req, res) => {});
 
 module.exports = router;

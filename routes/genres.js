@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 
 const auth = require("../middleware/auth");
+const admin = require("../middleware/admin");
 const { Genre, validate } = require("../models/genre");
 
 const router = express.Router();
@@ -30,13 +31,10 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
     // const genre = genres.find((g) => g.id === parseInt(req.params.id));
     // if (!genre) return res.status(404).send("The given genre ID not found");
-    try {
-        const genre = await Genre.findById(req.params.id);
-        res.send(genre);
-    } catch (ex) {
-        console.log(ex.message);
-        return res.status(404).send("The given genre ID not found");
-    }
+    const genre = await Genre.findById(req.params.id);
+    if (!genre) return res.status(404).send("The given genre ID not found");
+
+    res.send(genre);
 });
 
 // ********* POST
@@ -52,14 +50,14 @@ router.post("/", auth, async (req, res) => {
     // res.send(genre);
 
     let genre = new Genre({ name: req.body.name });
-    try {
-        await genre.save();
-        res.send(genre);
-    } catch (ex) {
-        for (const err in ex.errors) {
-            console.log(ex.errors[err].message);
-        }
-    }
+    // try {
+    await genre.save();
+    res.send(genre);
+    // } catch (ex) {
+    //     for (const err in ex.errors) {
+    //         console.log(ex.errors[err].message);
+    //     }
+    // }
 });
 
 // ********* PUT
@@ -69,34 +67,28 @@ router.put("/:id", async (req, res) => {
 
     // const genre = genres.find((g) => g.id === parseInt(req.params.id));
     // if (!genre) return res.status(404).send("The given genre ID not found");
-    try {
-        const genre = await Genre.findByIdAndUpdate(
-            req.params.id,
-            { name: req.body.name },
-            { new: true }
-        );
-        res.send(genre);
-    } catch (ex) {
-        console.log(ex.message);
-        return res.status(404).send("The given genre ID not found");
-    }
+    const genre = await Genre.findByIdAndUpdate(
+        req.params.id,
+        { name: req.body.name },
+        { new: true }
+    );
+    if (!genre) return res.status(404).send("The given genre ID not found");
+
+    res.send(genre);
 
     // genre.name = req.body.name;
 });
 
 // ********* DELETE
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", [auth, admin], async (req, res) => {
     // const genre = genres.find((g) => g.id === parseInt(req.params.id));
     // if (!genre) return res.status(404).send("The given genre ID not found");
 
-    try {
-        // const genre = await Genre.findByIdAndDelete(req.params.id);
-        const genre = await Genre.findByIdAndRemove(req.params.id);
-        res.send(genre);
-    } catch (ex) {
-        console.log(ex.message);
-        return res.status(404).send("The given genre ID not found");
-    }
+    // const genre = await Genre.findByIdAndDelete(req.params.id);
+    const genre = await Genre.findByIdAndRemove(req.params.id);
+    if (!genre) return res.status(404).send("The given genre ID not found");
+
+    res.send(genre);
 
     // const index = genres.indexOf(genre);
     // genres.splice(index, 1);

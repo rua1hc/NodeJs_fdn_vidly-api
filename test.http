@@ -10,17 +10,22 @@ http://localhost:3000/api/customers
 http://localhost:3000/api/genres
 ###
 POST http://localhost:3000/api/genres
-x-auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MmY2MTU3ZWRiYzA1YjI4MWNiNWIwZGIiLCJpYXQiOjE2NjAyOTQ1MjZ9.Rnt85fNxuDGb6pIju03-YqcvmVFyYAvtjD7fJnd9ubc
+x-auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MmY1MmQxOWJjMGM3MTNhZWM0YWZlZjUiLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE2NjAzNzg5MTN9.N82Ueh2b-ySRswuDqglaGaEWUHGqx0-9VacknzblldM
 content-type: application/json
 
 {
     "name": "add-auth"
 }
-
+###
+DELETE http://localhost:3000/api/genres/62f680380cb4fe093c13bc3f
+x-auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MmY1MmQxOWJjMGM3MTNhZWM0YWZlZjUiLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE2NjAzNzg5MTN9.N82Ueh2b-ySRswuDqglaGaEWUHGqx0-9VacknzblldM
 
 
 ### ### ###
-http://localhost:3000/api/users
+http://localhost:3000/api/users/
+###
+http://localhost:3000/api/users/me
+x-auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MmY1MmQxOWJjMGM3MTNhZWM0YWZlZjUiLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE2NjAzNzg5MTN9.N82Ueh2b-ySRswuDqglaGaEWUHGqx0-9VacknzblldM
 ###
 POST http://localhost:3000/api/users
 content-type: application/json

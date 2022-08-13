@@ -14,13 +14,10 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/:id", async (req, res) => {
-    try {
-        const rental = await Rental.findById(req.params.id);
-        res.send(rental);
-    } catch (ex) {
-        console.log(ex.message);
-        return res.status(404).send("The given rental ID not found");
-    }
+    const rental = await Rental.findById(req.params.id);
+    if (!rental) return res.status(404).send("The given rental ID not found");
+
+    res.send(rental);
 });
 
 // ********* POST
@@ -28,31 +25,31 @@ router.post("/", auth, async (req, res) => {
     const { error } = validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
+    const movie = await Movie.findById(req.body.movieId);
+    if (!movie) return res.status(400).send("Invalid movieId");
+
+    const customer = await Customer.findById(req.body.customerId);
+    if (!customer) return res.status(400).send("Invalid customerId");
+
+    if (movie.numberInStock === 0)
+        return res.status(400).send("Movie not in stock");
+
+    let rental = new Rental({
+        customer: {
+            _id: customer._id,
+            name: customer.name,
+            // isGold: customer.isGold,
+            phone: customer.phone,
+        },
+        movie: {
+            _id: movie._id,
+            title: movie.title,
+            dailyRentalRate: movie.dailyRentalRate,
+        },
+        // dateOut: Date.now,
+    });
+
     try {
-        const movie = await Movie.findById(req.body.movieId);
-        if (!movie) return res.status(404).send("Invalid movieId");
-
-        const customer = await Customer.findById(req.body.customerId);
-        if (!customer) return res.status(404).send("Invalid customerId");
-
-        if (movie.numberInStock === 0)
-            return res.status(400).send("Movie not in stock");
-
-        let rental = new Rental({
-            customer: {
-                _id: customer._id,
-                name: customer.name,
-                // isGold: customer.isGold,
-                phone: customer.phone,
-            },
-            movie: {
-                _id: movie._id,
-                title: movie.title,
-                dailyRentalRate: movie.dailyRentalRate,
-            },
-            // dateOut: Date.now,
-        });
-
         const session = await mongoose.startSession();
         await session.withTransaction(async () => {
             movie.numberInStock--;
@@ -66,48 +63,14 @@ router.post("/", auth, async (req, res) => {
         for (const err in ex.errors) {
             console.log(ex.errors[err].message);
         }
+        res.status(500).send("Something failed..");
     }
 });
 
 // ********* PUT
-// router.put("/:id", async (req, res) => {
-//     const { error } = validate(req.body);
-//     if (error) return res.status(400).send(error.details[0].message);
-
-//     try {
-//         const genre = await Genre.findById(req.body.genreId);
-//         if (!genre)
-//             return res.status(404).send("The given genreId is not found");
-
-//         const movie = await Rental.findByIdAndUpdate(
-//             req.params.id,
-//             {
-//                 title: req.body.title,
-//                 genre: {
-//                     _id: genre._id,
-//                     name: genre.name,
-//                 },
-//                 numberInStock: req.body.numberInStock,
-//                 dailyRentalRate: req.body.dailyRentalRate,
-//             },
-//             { new: true }
-//         );
-//         res.send(movie);
-//     } catch (ex) {
-//         console.log(ex.message);
-//         return res.status(404).send("The given movie ID not found");
-//     }
-// });
+// router.put("/:id", async (req, res) => {});
 
 // ********* DELETE
-// router.delete("/:id", async (req, res) => {
-//     try {
-//         const movie = await Rental.findByIdAndRemove(req.params.id);
-//         res.send(movie);
-//     } catch (ex) {
-//         console.log(ex.message);
-//         return res.status(404).send("The given movie ID not found");
-//     }
-// });
+// router.delete("/:id", async (req, res) => {});
 
 module.exports = router;

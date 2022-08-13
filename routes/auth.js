@@ -17,13 +17,10 @@ const router = express.Router();
 // });
 
 // router.get("/:id", async (req, res) => {
-//     try {
-//         const user = await User.findById(req.params.id);
-//         res.send(user);
-//     } catch (ex) {
-//         console.log(ex.message);
-//         return res.status(404).send("The given user ID not found");
-//     }
+//     const user = await User.findById(req.params.id);
+//     if (!user) return res.status(404).send("The given user ID not found");
+
+//     res.send(user);
 // });
 
 // ********* POST

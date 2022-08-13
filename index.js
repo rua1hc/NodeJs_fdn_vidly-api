@@ -18,7 +18,7 @@ const home = require("./routes/home");
 const vidlyUrl = "mongodb://localhost:27017/vidly";
 
 if (!config.get("jwtPrivateKey")) {
-    console.error("FATAL ERROR: jwtPirvateKey is not defined");
+    console.error("FATAL ERROR: jwtPrivateKey is not defined");
     process.exit(1);
 }
 

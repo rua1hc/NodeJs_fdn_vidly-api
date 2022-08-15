@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 
 const auth = require("../middleware/auth");
 const admin = require("../middleware/admin");
+const validateObjId = require("../middleware/validateObjId");
 // const asyncMiddleware = require("../middleware/async");
 const { Genre, validate } = require("../models/genre");
 
@@ -28,6 +29,13 @@ router.get("/", async (req, res) => {
     const genres = await Genre.find().sort("name");
     res.send(genres);
 });
+// router.get(
+//     "/",
+//     asyncMiddleware(async (req, res) => {
+//         const genres = await Genre.find().sort("name");
+//         res.send(genres);
+//     })
+// );
 // router.get("/", async (req, res, next) => {
 //     try {
 //         const genres = await Genre.find().sort("name");
@@ -37,7 +45,7 @@ router.get("/", async (req, res) => {
 //     }
 // });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", validateObjId, async (req, res) => {
     // const genre = genres.find((g) => g.id === parseInt(req.params.id));
     // if (!genre) return res.status(404).send("The given genre ID not found");
     const genre = await Genre.findById(req.params.id);

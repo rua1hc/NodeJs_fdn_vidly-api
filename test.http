@@ -7,7 +7,7 @@ http://localhost:3000/api/customers
 
 
 ###
-http://localhost:3000/api/genres
+http://localhost:3000/api/genres/
 ###
 POST http://localhost:3000/api/genres
 x-auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MmY1MmQxOWJjMGM3MTNhZWM0YWZlZjUiLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE2NjAzNzg5MTN9.N82Ueh2b-ySRswuDqglaGaEWUHGqx0-9VacknzblldM
@@ -17,7 +17,7 @@ content-type: application/json
     "name": "add-auth"
 }
 ###
-DELETE http://localhost:3000/api/genres/62f680380cb4fe093c13bc3f
+DELETE http://localhost:3000/api/genres/62fa1500e3bbeb0440020274
 x-auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MmY1MmQxOWJjMGM3MTNhZWM0YWZlZjUiLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE2NjAzNzg5MTN9.N82Ueh2b-ySRswuDqglaGaEWUHGqx0-9VacknzblldM
 
 
